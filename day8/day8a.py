@@ -1,4 +1,4 @@
-import re, itertools
+import re, itertools, copy
 
 def foo(l, n): ### Make all combinations of items in l of length n
      yield from itertools.product(*([l] * n))
@@ -11,11 +11,33 @@ def combs(a):
         cs += [c, c+[a[0]]]
     return cs
 
-with open("day8_test.txt") as f:
+def add_an(addx, addy):
+    in1 = True
+
+    if an1y < m and 0<= an1y:
+        #print("ok i y-led")
+        if an1x < m and 0<= an1x:
+            print((an1y, an1x))
+            if (an1y, an1x) not in list(antinodes):
+                print("Adding: " + str((an1y, an1x)))
+                #print("inte redan med")
+                antinodes.add((an1y, an1x))
+            #else:
+                #print("redan med")
+        else:
+            print("X1 too big!")
+            in1 = False
+    else:
+        print("Y1 too big!")
+        in1 = False
+
+    return in1
+
+
+with open("day8.txt") as f:
     inp = [line.rstrip() for line in f]
 
 ants = set()
-antinodes = []
 m = len(inp)
 
 
@@ -25,10 +47,10 @@ for l in range(m):
         for r in reg:
             ants.add(r)
 
-print([4, 9] + [-1, 4])
+antinodes = set()
             
 for a in list(ants):
-    print(a)
+    #print(a)
 
     loc = []
     
@@ -36,31 +58,96 @@ for a in list(ants):
         if a in inp[l]:
             x = [i for i, ltr in enumerate(inp[l]) if ltr in a]
             for thisx in x:
-                loc.append([[l, thisx]])
+                loc.append([l, thisx])
+                antinodes.add((l, thisx))
 
             for thisl in range(len(loc)-1):
-                for thatl in range(thisl, len(loc)):
-                    blubb
-                
-                
+                for thatl in range((thisl+1), len(loc)):
+                    #print([loc[thatl], loc[thisl]])
+                    
+                    dy = loc[thatl][0] - loc[thisl][0]
+                    dx = loc[thatl][1] - loc[thisl][1]
 
+                    #print("Diff is " + str((dy, dx)))
 
-                
-    print(loc)  
+                    in1 = True
 
+                    n = 1
+                    while in1:
+                        print(n)
 
+                        an1y = loc[thatl][0] + n*dy
+                        an1x = loc[thatl][1] + n*dx
 
+                        #print([an1y, an1x])
 
+                        if an1y < m and 0<= an1y:
+                            #print("ok i y-led")
+                            if an1x < m and 0<= an1x:
+                                #print((an1y, an1x))
+                                if (an1y, an1x) not in list(antinodes):
+                                    print("Adding: " + str((an1y, an1x)))
+                                    #print("inte redan med")
+                                    antinodes.add((an1y, an1x))
+                                #else:
+                                    #print("redan med")
+                            else:
+                                #print("X1 too big!")
+                                in1 = False
+                        else:
+                            print("Y1 too big!")
+                            in1 = False
 
+                        n += 1
+                        #input("Pause...")
+                        
+                    in2 = True
+                    n = 1
+                    while in2:
+                        an2y = loc[thisl][0] - n*dy
+                        an2x = loc[thisl][1] - n*dx
 
+                        #print([an2y, an2x])
 
+                        if an2y < m and 0<= an2y:
+                            #print("ok i y-led")
+                            if an2x < m and 0<= an2x:
+                                #print((an2y, an2x))
+                                if (an2y, an2x) not in list(antinodes):
+                                    #print("Adding: " + str((an2y, an2x)))
+                                    #print("inte redan med")
+                                    antinodes.add((an2y, an2x))
+                                #else:
+                                    #print("redan med")
+                            else:
+                                #print("X1 too big!")
+                                in2 = False
+                        else:
+                            #print("Y1 too big!")
+                            in2 = False
 
+                        n += 1
+                        #input("Pause...")
 
+                        #if (0 <= an2y and an2y <= m and
+                        #0 <= an2x and an2x <= m and
+                        #[an2y, an2x] not in antinodes):
+                        #antinodes.append([an2y, an2x])
 
+                    #input("Pause...")
+print(list(antinodes))
+print(len(antinodes))
 
+input("Pause...")
 
-
-
+for l in range(m):
+    for c in range(m):
+        if (l, c) in antinodes:
+            print("#", end = "")
+        else:
+            print(inp[l][c], end = "")
+    print("")
+    
 
 
 
